@@ -11,7 +11,6 @@ public class BasicLEDExample {
         String ArduinoPort = "COM3"; //Your port name here
         int BAUD_RATE = 9600;
         Arduino arduino = new Arduino(ArduinoPort, BAUD_RATE);
-
         arduino.openConnection();
         arduino.serialWrite('1'); //serialWrite is an overridden method, allowing both characters and strings.//its second parameter even allows delays. more details can be found in the documentation.
         char input = ob.nextLine().charAt(0);
