@@ -1,27 +1,28 @@
-package arduino;
+package al.cara.thesis.arduino;
 
+import al.cara.thesis.arduino.port.ArduinoControllerInterface;
 import com.fazecast.jSerialComm.SerialPort;
 
 import java.awt.*;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class Arduino {
+public class ArduinoConnector implements ArduinoControllerInterface {
     private SerialPort comPort;
     private String portDescription;
     private int baud_rate;
 
-    public Arduino() {
+    public ArduinoConnector() {
         //empty constructor if port undecided
     }
 
-    public Arduino(String portDescription) {
+    public ArduinoConnector(String portDescription) {
         //make sure to set baud rate after
         this.portDescription = portDescription;
         comPort = SerialPort.getCommPort(this.portDescription);
     }
 
-    public Arduino(String portDescription, int baud_rate) {
+    public ArduinoConnector(String portDescription, int baud_rate) {
         //preferred constructor
         this.portDescription = portDescription;
         comPort = SerialPort.getCommPort(this.portDescription);
@@ -52,6 +53,7 @@ public class Arduino {
         comPort.setBaudRate(this.baud_rate);
     }
 
+    @Override
     public String getPortDescription() {
         return portDescription;
     }
@@ -61,10 +63,12 @@ public class Arduino {
         comPort = SerialPort.getCommPort(this.portDescription);
     }
 
+    @Override
     public SerialPort getSerialPort() {
         return comPort;
     }
 
+    @Override
     public String serialRead() {
         //will be an infinite loop if incoming data is not bound
         comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
@@ -80,6 +84,7 @@ public class Arduino {
         return out;
     }
 
+    @Override
     public String serialRead(int limit) {
         //in case of unlimited incoming data, set a limit for number of readings
         comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
@@ -98,6 +103,7 @@ public class Arduino {
         return out;
     }
 
+    @Override
     public void serialWrite(String s) {
         //writes the entire string at once.
         comPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
@@ -111,6 +117,7 @@ public class Arduino {
 
     }
 
+    @Override
     public void serialWrite(String s, int noOfChars, int delay) {
         //writes the entire string, 'noOfChars' characters at a time, with a delay of 'delay' between each send.
         comPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
@@ -132,6 +139,7 @@ public class Arduino {
 
     }
 
+    @Override
     public void serialWrite(char c) {
         //writes the character to output stream.
         comPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
@@ -144,6 +152,7 @@ public class Arduino {
         pout.flush();
     }
 
+    @Override
     public void serialWrite(char c, int delay) {
         //writes the character followed by a delay of 'delay' milliseconds.
         comPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
