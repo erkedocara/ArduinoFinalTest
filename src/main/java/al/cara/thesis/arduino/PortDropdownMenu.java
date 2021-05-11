@@ -1,4 +1,4 @@
-package arduino;
+package al.cara.thesis.arduino;
 
 import com.fazecast.jSerialComm.SerialPort;
 

@@ -1,16 +1,17 @@
-package examples;
+package al.cara.thesis.arduino.examples;
 
-import arduino.Arduino;
-import arduino.PortDropdownMenu;
+import al.cara.thesis.arduino.ArduinoConnector;
+import al.cara.thesis.arduino.PortDropdownMenu;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class LEDWithGUI {
-    static Arduino arduino;
+    static ArduinoConnector arduinoConnector;
     static JFrame frame = new JFrame("An Led Controller");
     static JButton btnOn = new JButton("ON");
     static JButton btnOff = new JButton("OFF");
+    static JButton btntimer = new JButton("timmer");
     static JButton btnRefresh;
 
     public static void main(String[] args) {
@@ -18,9 +19,10 @@ public class LEDWithGUI {
 
         frame.setResizable(false);
 
-        btnOn.addActionListener(e -> arduino.serialWrite('1'));
+        btnOn.addActionListener(e -> arduinoConnector.serialWrite('1'));
 
-        btnOff.addActionListener(e -> arduino.serialWrite('0'));
+        btnOff.addActionListener(e -> arduinoConnector.serialWrite('0'));
+        btntimer.addActionListener(e -> arduinoConnector.serialWrite('2'));
 
     }
 
@@ -39,22 +41,24 @@ public class LEDWithGUI {
 
         connectButton.addActionListener(e -> {
             if (connectButton.getText().equals("Connect")) {
-                arduino = new Arduino(portList.getSelectedItem().toString(), 9600);
-                if (arduino.openConnection()) {
+                arduinoConnector = new ArduinoConnector(portList.getSelectedItem().toString(), 9600);
+                if (arduinoConnector.openConnection()) {
                     connectButton.setText("Disconnect");
                     portList.setEnabled(false);
                     btnOn.setEnabled(true);
                     btnOff.setEnabled(true);
+                    btntimer.setEnabled(true);
                     btnRefresh.setEnabled(false);
                     frame.pack();
                 }
             } else {
-                arduino.closeConnection();
+                arduinoConnector.closeConnection();
                 connectButton.setText("Connect");
                 portList.setEnabled(true);
                 btnOn.setEnabled(false);
                 btnRefresh.setEnabled(true);
                 btnOff.setEnabled(false);
+                btntimer.setEnabled(false);
             }
         });
         topPanel.setBackground(Color.gray);
@@ -73,12 +77,17 @@ public class LEDWithGUI {
         btnOn.setForeground(Color.GREEN);
         btnOn.setEnabled(false);
         btnOff.setForeground(Color.RED);
+        btntimer.setForeground(Color.RED);
+
         btnOff.setEnabled(false);
+        btntimer.setEnabled(false);
+
         JPanel pane = new JPanel();
         pane.setBackground(Color.gray);
         pane.add(jTextField);
         pane.add(btnOn);
         pane.add(btnOff);
+        pane.add(btntimer);
         frame.add(pane, BorderLayout.CENTER);
         populateMenu();
         frame.pack();

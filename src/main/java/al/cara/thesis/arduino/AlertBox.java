@@ -1,4 +1,4 @@
-package arduino;
+package al.cara.thesis.arduino;
 
 import javax.swing.*;
 import java.awt.*;
