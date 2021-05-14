@@ -30,6 +30,9 @@ public class LocalTemperaturePanel extends JPanel {
     public void setLabelTemp(String temperature) {
         labelTemp.setText(temperature);
     }
+    public void setLabelHumidity(String humidity) {
+        lblStationName.setText(humidity);
+    }
 
     private JLabel labelTemp;
 
@@ -39,11 +42,14 @@ public class LocalTemperaturePanel extends JPanel {
      * Create the panel.
      */
     public LocalTemperaturePanel() {
-        labelTemp = new JLabel("0.0");
+        labelTemp = new JLabel("TEMP...");
         labelTemp.setFont(new Font("Tahoma", Font.PLAIN, 48));
         labelTemp.setHorizontalAlignment(SwingConstants.CENTER);
 
-        lblStationName = new JLabel("local");
+
+
+        lblStationName = new JLabel("Humidity...");
+        lblStationName.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lblStationName.setHorizontalAlignment(SwingConstants.CENTER);
         GroupLayout groupLayout = new GroupLayout(this);
         groupLayout.setHorizontalGroup(
@@ -136,9 +142,16 @@ public class LocalTemperaturePanel extends JPanel {
             String[] words = readline.split(" ");
             String str = words[1].replaceAll("[^\\.0123456789]",""); // remove all non-digits
             double temp = Double.parseDouble(str);
-            if (temp>25) setBackground(Color.RED);
+            if (temp>25) setForeground(Color.RED);
             String formattedTemp = String.format(Locale.getDefault(), "%.1f", temp);
-            setLabelTemp(formattedTemp+ " °C");
+            setLabelTemp("TEMP:"+formattedTemp+ "°C");
+        }
+        else if (readline.startsWith("Humidity:")) {
+            String[] words = readline.split(" ");
+            String str = words[1].replaceAll("[^\\.0123456789]",""); // remove all non-digits
+            double humidity = Double.parseDouble(str);
+            String formattedHumidity = String.format(Locale.getDefault(), "%.1f", humidity);
+            setLabelHumidity("HUMIDITY:"+formattedHumidity+ "%");
         }
     }
 }
